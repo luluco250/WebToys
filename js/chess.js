@@ -1,6 +1,6 @@
 //Simple Chess Game
 
-const CHESS = (function() {
+(function() {
 
     //Canvas stuff
 
@@ -33,6 +33,36 @@ const CHESS = (function() {
     window.addEventListener("mousemove", function(event) {
         mouse.x = event.pageX - canvas.offsetLeft - border.left;
         mouse.y = event.pageY - canvas.offsetTop - border.top;
+    });
+
+    window.addEventListener("mousedown", function() {
+        mouse[event.button] = true;
+        /*switch (event.button) {
+            case 0:
+                mouse.left = true;
+                break;
+            case 1:
+                mouse.middle = true;
+                break;
+            case 2:
+                mouse.right = true;
+                break;
+        }*/
+    });
+
+    window.addEventListener("mouseup", function() {
+        mouse[event.button] = false;
+        /*switch (event.button) {
+            case 0:
+                mouse.left = false;
+                break;
+            case 1:
+                mouse.middle = false;
+                break;
+            case 2:
+                mouse.right = false;
+                break;
+        }*/
     });
 
     //Keyboard stuff
@@ -72,6 +102,9 @@ const CHESS = (function() {
 
     function logic() {
         select_cell();
+        if (mouse[0]) {
+            alert("Clicked at cell: (" + current_cell.x + ", " + current_cell.y + ")");
+        }
     }
 
     //Render stuff
@@ -80,29 +113,27 @@ const CHESS = (function() {
         ctx.clearRect(0, 0, res.x, res.y);
     };
 
-    function draw_quads() {
+    //Size of the selection border in pixels
+    const selection_border_size = 5;
+    const selection_border_color = "#f00";
+
+    function draw_cells() {
+        //First let's paint a "background"
+        ctx.fillStyle = selection_border_color;
+        ctx.fillRect(0, 0, res.x, res.y);
+
+        var padding = 0;
         for (var x = 0; x < cells.x; ++x) {
             for (var y = 0; y < cells.y; ++y) {
-                //First let's paint a "background"
-                ctx.fillStyle = "#f00";
-                ctx.fillRect(res.x / cells.x * x, res.y / cells.y * y, res.x / cells.x, res.y / cells.y);
-
                 //Now if it's the one selected we'll only paint part of it's center to make a border effect
                 ctx.fillStyle = (x % 2 == y % 2) ? "#fff" : "#000";
-                if (current_cell.x == x && current_cell.y == y)
-                    ctx.fillRect(
-                        res.x / cells.x * x + 5, 
-                        res.y / cells.y * y + 5, 
-                        res.x / cells.x - 10, //the w/h padding needs to be doubled here to compensate the x/y padding
-                        res.y / cells.y - 10
-                    );
-                else
-                    ctx.fillRect(
-                        res.x / cells.x * x, 
-                        res.y / cells.y * y, 
-                        res.x / cells.x, 
-                        res.y / cells.y
-                    );
+                padding = (current_cell.x == x && current_cell.y == y) ? selection_border_size : 0;
+                ctx.fillRect(
+                    res.x / cells.x * x + padding,
+                    res.y / cells.y * y + padding,
+                    res.x / cells.x - padding * 2, //the w/h padding needs to be doubled to compensate the x/y padding
+                    res.y / cells.y - padding * 2
+                );
             }
         }
     }
@@ -117,7 +148,7 @@ const CHESS = (function() {
 
     function render() {
         clear();
-        draw_quads();
+        draw_cells();
         //draw_circle();
     }
 
