@@ -27,7 +27,11 @@
 
     var mouse = {
         x: 0,
-        y: 0
+        y: 0,
+        button: null,
+        released: [false, false, false],
+        pressed: [false, false, false],
+        held: [false, false, false]
     };
 
     window.addEventListener("mousemove", function(event) {
@@ -35,35 +39,19 @@
         mouse.y = event.pageY - canvas.offsetTop - border.top;
     });
 
-    window.addEventListener("mousedown", function() {
-        mouse[event.button] = true;
-        /*switch (event.button) {
-            case 0:
-                mouse.left = true;
-                break;
-            case 1:
-                mouse.middle = true;
-                break;
-            case 2:
-                mouse.right = true;
-                break;
-        }*/
+    window.addEventListener("mousedown", function(event) {
+        mouse.held[event.button] = true;
+        mouse.button = event.button;
     });
 
-    window.addEventListener("mouseup", function() {
-        mouse[event.button] = false;
-        /*switch (event.button) {
-            case 0:
-                mouse.left = false;
-                break;
-            case 1:
-                mouse.middle = false;
-                break;
-            case 2:
-                mouse.right = false;
-                break;
-        }*/
+    window.addEventListener("mouseup", function(event) {
+        mouse.held[event.button] = false;
+        mouse.button = null;
     });
+
+    function mouse_handling() {
+        
+    }
 
     //Keyboard stuff
 
@@ -102,9 +90,6 @@
 
     function logic() {
         select_cell();
-        if (mouse[0]) {
-            alert("Clicked at cell: (" + current_cell.x + ", " + current_cell.y + ")");
-        }
     }
 
     //Render stuff
@@ -162,6 +147,10 @@
         stats_text.push("Mouse Position: (" + mouse.x + ", " + mouse.y + ")");
         stats_text.push("Current Cell: (" + current_cell.x + ", " + current_cell.y + ")");
         stats_text.push("Border Width: (" + border.top + ", " + border.bottom + ", " + border.left + ", " + border.right + ")");
+        stats_text.push("Mouse Pressed: (" + mouse.pressed[0] + ", " + mouse.pressed[1] + ", " + mouse.pressed[2] + ")");
+        stats_text.push("Mouse Released: (" + mouse.released[0] + ", " + mouse.released[1] + ", " + mouse.released[2] + ")");
+        stats_text.push("Mouse Held: (" + mouse.held[0] + ", " + mouse.held[1] + ", " + mouse.held[2] + ")");
+        stats_text.push("Mouse Button: " + mouse.button);
 
         stats_span.innerText = stats_text.join("\n");
         stats_text = [];
