@@ -1,0 +1,33 @@
+html, body {
+    background: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+#center {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+#game_canvas {
+    background: #fff;
+    margin-top: 20px;
+    display: border;
+    border-style: solid;
+    border-width: 35px;
+    border-top-color: #3f2013;
+    border-bottom-color: #2b140a;
+    border-left-color: #381c10;
+    border-right-color: #2d150b;
+}
+
+#stats {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    text-align: right;
+    top: 10px;
+    right: 20px;
+}
