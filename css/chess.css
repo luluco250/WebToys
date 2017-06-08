@@ -31,3 +31,7 @@ html, body {
     top: 10px;
     right: 20px;
 }
+
+.hidden {
+	display: none;
+}
